@@ -1,0 +1,74 @@
+{
+  "env": {
+    "es2021": true,
+    "node": true,
+    "jest": true
+  },
+  "extends": ["airbnb-base", "plugin:@typescript-eslint/recommended"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "plugins": ["@typescript-eslint"],
+  "rules": {
+    "consistent-return": ["error", { "treatUndefinedAsUnspecified": true }],
+    "import/prefer-default-export": "off",
+    "no-use-before-define": ["error", { "functions": false }],
+    "func-names": "off",
+    "arrow-body-style": "off",
+    "function-paren-newline": "off",
+    "max-classes-per-file": "off",
+    "complexity": ["warn", 8],
+    "max-statements": ["warn", { "max": 10 }],
+    "max-statements-per-line": ["warn", { "max": 1 }],
+    "max-nested-callbacks": ["warn", { "max": 2 }],
+    "max-depth": ["warn", { "max": 2 }],
+    "max-params": ["warn", 3],
+    "no-underscore-dangle": ["error", { "allow": ["__v", "_id"] }],
+    "max-len": [
+      "warn",
+      80,
+      {
+        "ignoreUrls": true,
+        "ignoreComments": true,
+        "ignoreStrings": true
+      }
+    ],
+    "no-param-reassign": [
+      "warn",
+      {
+        "props": true,
+        "ignorePropertyModificationsFor": [
+          "acc",
+          "accumulator",
+          "item",
+          "e",
+          "module",
+          "req",
+          "request",
+          "res",
+          "response",
+          "session",
+          "ret"
+        ]
+      }
+    ],
+    "no-useless-constructor": "off",
+    "class-methods-use-this": "off",
+    "camelcase": ["error", { "allow": [] }],
+    "prettier/prettier": "error",
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "ts": "never"
+      }
+    ]
+  },
+  "settings": {
+    "import/resolver": {
+      "typescript": {}
+    }
+  }
+}
