@@ -13,6 +13,12 @@
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-plugin-import": "^2.22.0",
     "git-commit-msg-linter": "^2.7.0",
+    "husky": "^4.3.0",
     "typescript": "^4.0.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "echo 'pre commit'"
+    }
   }
 }
