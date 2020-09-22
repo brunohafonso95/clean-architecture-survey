@@ -14,11 +14,18 @@
     "eslint-plugin-import": "^2.22.0",
     "git-commit-msg-linter": "^2.7.0",
     "husky": "^4.3.0",
+    "lint-staged": "^10.4.0",
     "typescript": "^4.0.3"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "echo 'pre commit'"
+      "pre-commit": "lint-staged"
     }
+  },
+  "lint-staged": {
+    "*.ts": [
+      "eslint --fix -f html -o lint.html",
+      "git add"
+    ]
   }
 }
