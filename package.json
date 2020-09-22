@@ -1,0 +1,8 @@
+{
+  "name": "clean-archicteture-survey",
+  "description": "survey manager using clean archicteture to handle and create surveys to the community",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Bruno Afonso <brunohafonso@gmail.com>",
+  "license": "MIT"
+}
