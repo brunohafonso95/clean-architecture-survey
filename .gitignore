@@ -87,6 +87,7 @@ typings/
 .nuxt
 dist
 html-report
+lint.html
 
 # Gatsby files
 .cache/
