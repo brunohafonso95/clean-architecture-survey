@@ -1,10 +1,17 @@
 module.exports = {
+  displayName: 'Unit tests',
   roots: ['<rootDir>/src'],
   clearMocks: true,
   collectCoverage: true,
   collectCoverageFrom: ['<rootDir>/src/**/*.ts'],
   coverageDirectory: 'coverage',
-  coveragePathIgnorePatterns: ['\\\\node_modules\\\\', 'dist'],
+  coveragePathIgnorePatterns: [
+    '\\\\node_modules\\\\',
+    'dist',
+    'src/presentation/interfaces',
+    'src/domain/interfaces',
+    'src/utils/interfaces',
+  ],
   coverageProvider: 'v8',
   preset: 'ts-jest',
   reporters: [
