@@ -1,10 +1,8 @@
 import IAccountModel from '../interfaces/IAccountModel';
-import IUseCase from '../interfaces/IUseCase';
+import IAddAccount from '../interfaces/IAddAccount';
+import IAddAccountModel from '../interfaces/IAddAccountModel';
 
-interface IAddAccountModel extends Omit<IAccountModel, 'id'> {}
-
-export default class AddAccount
-  implements IUseCase<IAddAccountModel, IAccountModel> {
+export default class AddAccount implements IAddAccount {
   public async execute(accountData: IAddAccountModel): Promise<IAccountModel> {
     return {
       id: '',

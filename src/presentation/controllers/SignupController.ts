@@ -1,15 +1,18 @@
 import httpStatus from 'http-status-codes';
-import IAccountModel from 'src/domain/interfaces/IAccountModel';
-import AddAccount from 'src/domain/usecases/AddAccount';
+
+import IAccountModel from '@domain/interfaces/IAccountModel';
+import AddAccount from '@domain/usecases/AddAccount';
+import IEmailValidator from '@utils/interfaces/IEmailValidator';
+import enableErrorLog from '@decorators/enableErrorLog';
 
 import BaseController from '../abstracts/BaseController';
 import { ServerError, InvalidParamError } from '../errors';
 import IController from '../interfaces/IController';
-import IEmailValidator from '../../utils/interfaces/IEmailValidator';
 import IHttpRequest from '../interfaces/IHttpRequest';
 
 import IHttpResponse from '../interfaces/IHttpResponse';
 
+@enableErrorLog
 export default class SignupController
   extends BaseController
   implements IController {
@@ -59,6 +62,7 @@ export default class SignupController
         email,
         password,
       });
+
       return this.formatHttpSuccessResponse<IAccountModel>(
         httpStatus.CREATED,
         newAccount,
@@ -66,7 +70,7 @@ export default class SignupController
     } catch (error) {
       return this.formatHttpErrorResponse(
         httpStatus.INTERNAL_SERVER_ERROR,
-        new ServerError(),
+        new ServerError(error.message),
       );
     }
   }

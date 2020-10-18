@@ -1,24 +1,26 @@
 import httpStatus from 'http-status-codes';
 
-import EmailValidator from '../../utils/EmailValidator';
+import EmailValidator from '@utils/EmailValidator';
+import IEmailValidator from '@utils/interfaces/IEmailValidator';
+import AddAccount from '@domain/usecases/AddAccount';
+import IAddAccount from '@domain/interfaces/IAddAccount';
+import LogErrorMongoRepository from '@infra/db/mongodb/logErrorRepository/LogErrorMongoRepository';
+import getErrorInstanceDetails from '@utils/getErrorInstanceDetails';
+
 import { InvalidParamError, MissingParamError, ServerError } from '../errors';
-import IEmailValidator from '../../utils/interfaces/IEmailValidator';
-import IUseCase from '../../domain/interfaces/IUseCase';
-
 import SignupController from './SignupController';
-import AddAccount from '../../domain/usecases/AddAccount';
 
-jest.mock('../../utils/EmailValidator');
-jest.mock('../../domain/usecases/AddAccount');
+jest.mock('@utils/EmailValidator');
+jest.mock('@domain/usecases/AddAccount');
 
 interface sutObject {
   emailValidatorMocked: jest.Mocked<IEmailValidator>;
-  addAccountMocked: jest.Mocked<IUseCase>;
+  addAccountMocked: jest.Mocked<IAddAccount>;
   sut: SignupController;
 }
 
 const makeAddAccountMock = (): jest.Mocked<AddAccount> => {
-  const addAccount = new AddAccount() as jest.Mocked<IUseCase>;
+  const addAccount = new AddAccount() as jest.Mocked<IAddAccount>;
   addAccount.execute.mockResolvedValue({
     id: 'valid_id',
     name: 'valid_name',
@@ -186,7 +188,7 @@ describe('SignupController tests', () => {
 
     const httpResponse = await sut.handle(httpRequest);
     expect(httpResponse.statusCode).toEqual(httpStatus.INTERNAL_SERVER_ERROR);
-    expect(httpResponse.body).toEqual(new ServerError());
+    expect(httpResponse.body).toEqual(new ServerError(''));
   });
 
   it('should call addAccount with correct values', async () => {
@@ -225,7 +227,28 @@ describe('SignupController tests', () => {
 
     const httpResponse = await sut.handle(httpRequest);
     expect(httpResponse.statusCode).toEqual(httpStatus.INTERNAL_SERVER_ERROR);
-    expect(httpResponse.body).toEqual(new ServerError());
+    expect(httpResponse.body).toEqual(new ServerError(''));
+  });
+
+  it('should insert a new error log on database when something wrong happens', async () => {
+    const { sut, addAccountMocked } = makeSut();
+    addAccountMocked.execute.mockRejectedValueOnce(new Error());
+    const createLogSpy = jest
+      .spyOn(LogErrorMongoRepository.prototype, 'create')
+      .mockResolvedValueOnce();
+
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'invalid_email',
+        password: '12345678',
+        passwordConfirmation: '12345678',
+      },
+    };
+
+    const response = await sut.handle(httpRequest);
+    const { date, ...errorDetails } = getErrorInstanceDetails(response.body);
+    expect(createLogSpy).toBeCalledWith(expect.objectContaining(errorDetails));
   });
 
   it('should return 201 with the created account', async () => {

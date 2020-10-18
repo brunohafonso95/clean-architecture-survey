@@ -1,19 +1,27 @@
 module.exports = {
-  displayName: 'Unit tests',
+  displayName: 'Root tests',
   roots: ['<rootDir>/src'],
   clearMocks: true,
   collectCoverage: true,
   collectCoverageFrom: ['<rootDir>/src/**/*.ts'],
   coverageDirectory: 'coverage',
   coveragePathIgnorePatterns: [
+    '@types',
     '\\\\node_modules\\\\',
     'dist',
     'src/presentation/interfaces',
     'src/domain/interfaces',
+    'src/main/interfaces',
+    'src/main/index.ts',
     'src/utils/interfaces',
+    'src/data/interfaces',
   ],
   coverageProvider: 'v8',
-  preset: 'ts-jest',
+  testEnvironment: 'node',
+  preset: '@shelf/jest-mongodb',
+  transform: {
+    '.+\\.ts$': 'ts-jest',
+  },
   reporters: [
     'default',
     [
@@ -26,7 +34,16 @@ module.exports = {
       },
     ],
   ],
-  testEnvironment: 'node',
   testMatch: ['**/src/**/*.spec.ts'],
   testPathIgnorePatterns: ['\\\\node_modules\\\\'],
+  setupFilesAfterEnv: ['./jest-setup.ts'],
+  moduleNameMapper: {
+    '@data/(.*)': '<rootDir>/src/data/$1',
+    '@decorators/(.*)': '<rootDir>/src/decorators/$1',
+    '@domain/(.*)': '<rootDir>/src/domain/$1',
+    '@infra/(.*)': '<rootDir>/src/infra/$1',
+    '@main/(.*)': '<rootDir>/src/main/$1',
+    '@presentation/(.*)': '<rootDir>/src/presentation/$1',
+    '@utils/(.*)': '<rootDir>/src/utils/$1',
+  },
 };

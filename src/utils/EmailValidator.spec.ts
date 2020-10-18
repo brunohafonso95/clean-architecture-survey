@@ -7,10 +7,6 @@ const makeSut = (): EmailValidator => {
   return emailValidator;
 };
 
-jest.mock('validator', () => ({
-  isEmail: () => true,
-}));
-
 describe('Email Validator', () => {
   it('should return false when the email provided is invalid', () => {
     const sut = makeSut();
